@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.birariro.model2excel</groupId>
+    <artifactId>model2excel</artifactId>
+    <packaging>jar</packaging>
+
+    <name>model2excel</name>
+    <description>Java Model Class to Excel WorkBook</description>
+    <version>1.0.0</version>
+    <url>https://github.com/birariro/model2excel</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>birariro</name>
+            <email>vps32@naver.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/birariro/model2excel.git</connection>
+        <developerConnection>scm:git:ssh://github.com:birariro/model2excel.git</developerConnection>
+        <url>http://github.com/birariro/model2excel/tree/master</url>
+    </scm>
+
+
+</project>

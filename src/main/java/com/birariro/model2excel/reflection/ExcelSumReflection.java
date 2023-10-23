@@ -12,6 +12,7 @@ import com.birariro.model2excel.data.Formula;
 public class ExcelSumReflection {
 
   private static final String SUM_FORMULA_FORMAT = "sum(%s%d:%s%d)";
+  private static final int START_ROW_NUM = 1;
 
   /**
    * included 에 포함된 field 를 sumLastRowNum 의 값까지 모두 더하는 formulas 를 반환한다.
@@ -29,7 +30,7 @@ public class ExcelSumReflection {
 
       if (includedFields.contains(titles[i])) {
         char c = (char) (65 + i);
-        String format = String.format(SUM_FORMULA_FORMAT, c, 1, c, sumLastRowNum);
+        String format = String.format(SUM_FORMULA_FORMAT, c, START_ROW_NUM, c, START_ROW_NUM+sumLastRowNum);
         formulas.add(Formula.of(format, true));
       } else {
         formulas.add(Formula.of(getAttach(excelSumAnnotation, titles[i])));

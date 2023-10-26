@@ -29,17 +29,20 @@ public class SheetManager {
         .orElseThrow(() -> new IllegalArgumentException());
 
     Class<?> clazz = firstData.getClass();
+    String[] groups = ExcelFieldReflection.getExcelFieldTitleGroup(clazz);
     String[] title = ExcelFieldReflection.getExcelFieldTitle(clazz);
 
     List<Object[]> rows = data.stream()
         .map(item -> ExcelFieldReflection.getExcelFieldData(item))
         .collect(Collectors.toList());
 
+    rowManager.writeTitleGroup(groups);
     rowManager.writeTitle(title);
+    rowManager.mergeEmptyGroup(groups, title);
     rowManager.writeBody(rows);
     rowManager.writeFooter(clazz, title);
 
-    cellSizeControl(sheet, rows.get(0).length);
+    cellSizeControl(sheet, title.length);
     return this.workbook;
   }
 

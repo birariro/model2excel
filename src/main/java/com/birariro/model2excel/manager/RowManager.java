@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
@@ -23,6 +24,35 @@ public class RowManager {
     this.workbook = workbook;
     this.sheet = sheet;
     this.cellManager = new CellManager(workbook);
+  }
+  public void writeTitleGroup(String[] group) {
+
+    Row row = sheet.createRow(sheet.getLastRowNum() + 1);
+    for (int column = 0; column < group.length; column++) {
+      Cell cell = cellManager.getCell(CellType.TITLE, row, column);
+      cellManager.writeCell(cell, group[column]);
+    }
+  }
+
+  /**
+   * group 을 사용했다면 title 와 중복값을 merge 한다
+   *
+   * @param group
+   * @param title
+   */
+  public void mergeEmptyGroup(String[] group, String[] title) {
+
+    if (group.length == 0) {
+      return;
+    }
+    int groupRowNum = sheet.getLastRowNum() - 1;
+    int titleRowNum = sheet.getLastRowNum();
+
+    for (int column = 0; column < group.length; column++) {
+      if (group[column].equals(title[column])) {
+        sheet.addMergedRegion(new CellRangeAddress(groupRowNum, titleRowNum, column, column));
+      }
+    }
   }
 
   public void writeTitle(String[] title) {

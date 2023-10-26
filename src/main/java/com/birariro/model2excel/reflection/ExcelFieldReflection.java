@@ -5,9 +5,46 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import com.birariro.model2excel.annotation.ExcelField;
+import com.birariro.model2excel.annotation.ExcelFieldGroup;
 
 public class ExcelFieldReflection {
 
+
+
+  /**
+   * ExcelFieldGroup 을 사용하지 않았다면 종료한다.
+   *
+   * @param clazz
+   * @return
+   */
+  public static String[] getExcelFieldTitleGroup(Class<?> clazz) {
+
+    Field[] fields = clazz.getDeclaredFields();
+
+    //ExcelFieldGroup 를 사용하지 않았다면 종료
+    long count = Arrays.stream(fields)
+        .filter(field -> field.isAnnotationPresent(ExcelFieldGroup.class))
+        .count();
+
+    if (count == 0) {
+      return new String[0];
+    }
+
+    String[] groups = Arrays.stream(fields)
+        .filter(
+            field -> field.isAnnotationPresent(ExcelFieldGroup.class) || field.isAnnotationPresent(ExcelField.class))
+        .map(field -> getExcelFieldGroupValue(field))
+        .toArray(String[]::new);
+
+    return groups;
+  }
+  private static String getExcelFieldGroupValue(Field field) {
+    if (field.isAnnotationPresent(ExcelFieldGroup.class)) {
+      return field.getAnnotation(ExcelFieldGroup.class).value();
+    }
+    //ExcelFieldGroup 이 없는 ExcelField 는 "" 이다
+    return field.getAnnotation(ExcelField.class).value();
+  }
 
   /**
    * row 들의 title 를 얻는다

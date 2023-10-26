@@ -33,9 +33,7 @@ public class OrderModel {
 
 ### @ExcelSum
 ```java
-@ExcelSum(fields = {"수량"}, remainSpace = {
-    @RemainSpace(fields = {"주문 ID"}, attach = "합계")
-})
+@ExcelSum(fields = {"수량"})
 @Getter
 public class OrderModel {
 	@ExcelField("주문 ID")
@@ -47,13 +45,11 @@ public class OrderModel {
 }
 ```
 @ExcelSum 의 fields 로 지정된 타이틀의 데이터들은 합산 하여 가장 하단에 들어간다. </br>
-fields 로 지정되지 않은 타이틀 하단은 빈공간 으로 남게 되며 </br>
-@RemainSpace 의 fields 로 타이틀을 지정시 해당 타이틀의 빈 공간을 다른 텍스트로 채워 넣을 수 있다. </br>
-@RemainSpace 의 fields 에 여러 타이틀을 지정시 해당 타이틀의 cell 을 병합하여 채워 넣는다. </br>
+fields 로 지정되지 않은 타이틀 하단은 빈공간 으로 남게 된다 </br>
 
-| 주문 ID      | 상품 이름 | 수량  | 
-|------------|-------|-----|
+| 주문 ID     | 상품 이름 | 수량  | 
+|-----------|-------|-----|
 | 20221011ABC | 사과    | 10  |
 | 20221011ABC | 양파    | 15  |
 | 20221011ABC | 신발    | 2   |
-| 합계          |       | 27    |
+|           |       | 27    |

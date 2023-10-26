@@ -51,6 +51,7 @@ public class RowManager {
   public void writeFooter(Class<?> clazz, String[] title) {
 
     List<Formula> formulas = ExcelSumReflection.fieldSumFormula(clazz, title, sheet.getLastRowNum());
+
     if (formulas.isEmpty()) {
       return;
     }
@@ -59,10 +60,6 @@ public class RowManager {
     for (int index = 0; index < formulas.size(); index++) {
       Cell cell = cellManager.getCell(CellType.TITLE, row, index);
       Formula formula = formulas.get(index);
-
-      if (!formula.isFormulated()) {
-        index = index + cellManager.mergeCells(sheet, formulas, row, index, formula);
-      }
 
       cellManager.writeFormula(cell, formula);
     }

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.birariro.model2excel.annotation.ExcelSum;
-import com.birariro.model2excel.annotation.ExcelSum.RemainSpace;
 import com.birariro.model2excel.data.Formula;
 
 
@@ -33,21 +32,12 @@ public class ExcelSumReflection {
         String format = String.format(SUM_FORMULA_FORMAT, c, START_ROW_NUM, c, START_ROW_NUM+sumLastRowNum);
         formulas.add(Formula.of(format, true));
       } else {
-        formulas.add(Formula.of(getAttach(excelSumAnnotation, titles[i])));
+        formulas.add(Formula.of("",false));
       }
 
     }
 
     return formulas;
-  }
-
-  private static String getAttach(ExcelSum excelSumAnnotation, String title) {
-
-    return Arrays.stream(excelSumAnnotation.remainSpace())
-        .filter(remainSpace -> Arrays.asList(remainSpace.fields()).contains(title))
-        .map(RemainSpace::attach)
-        .findFirst()
-        .orElse("");
   }
 
 }

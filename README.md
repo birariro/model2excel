@@ -36,7 +36,7 @@ public class OrderModel {
 
 ### @ExcelSum
 ```java
-@ExcelSum(fields = {"수량"})
+@ExcelSum(fields = {"count"})
 @Getter
 public class OrderModel
 ```
@@ -45,7 +45,7 @@ public class OrderModel
 </p>
 
 
-@ExcelSum 의 fields 로 지정된 타이틀의 데이터들은 합산 하여 가장 하단에 들어간다. </br>
+@ExcelSum 의 fields 로 지정된 맴버 변수의 데이터들은 합산 하여 가장 하단에 들어간다. </br>
 fields 로 지정되지 않은 타이틀 하단은 빈공간 으로 남게 된다 </br>
 
 
@@ -54,6 +54,7 @@ fields 로 지정되지 않은 타이틀 하단은 빈공간 으로 남게 된�
 
 @ExcelFieldGroup 를 사용하여 타이틀 의 상위 그룹을 지정할 수 있다.
 ```java
+@ExcelSum(fields = {"count"})
 @Getter
 public class OrderModel {
   @ExcelField("주문 ID")

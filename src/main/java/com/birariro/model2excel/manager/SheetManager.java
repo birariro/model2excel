@@ -40,7 +40,7 @@ public class SheetManager {
     rowManager.writeTitle(title);
     rowManager.mergeEmptyGroup(groups, title);
     rowManager.writeBody(rows);
-    rowManager.writeFooter(clazz, title);
+    rowManager.writeFooter(clazz);
 
     cellSizeControl(sheet, title.length);
     return this.workbook;

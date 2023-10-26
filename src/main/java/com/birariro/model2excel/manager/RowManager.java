@@ -78,9 +78,9 @@ public class RowManager {
     }
   }
 
-  public void writeFooter(Class<?> clazz, String[] title) {
+  public void writeFooter(Class<?> clazz) {
 
-    List<Formula> formulas = ExcelSumReflection.fieldSumFormula(clazz, title, sheet.getLastRowNum());
+    List<Formula> formulas = ExcelSumReflection.fieldSumFormula(clazz, sheet.getLastRowNum());
 
     if (formulas.isEmpty()) {
       return;

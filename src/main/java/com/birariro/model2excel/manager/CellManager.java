@@ -78,30 +78,6 @@ public class CellManager {
   }
 
 
-  /**
-   * remainSpace 의 경우 같은 텍스트면 병합 한다.<br/> 병합 된 수만큼 index 를 증가 시켜야 중복 병합 에러가 발생하지 않는다.
-   */
-  int mergeCells(SXSSFSheet sheet, List<Formula> formulas, Row row, int startCol,
-      Formula formula) {
-
-    if (!ExcelUtils.hasText(formula.getText())) {
-      return 0;
-    }
-
-    int endCol = startCol;
-    for (int i = startCol + 1; i < formulas.size(); i++) {
-      Formula nextFormula = formulas.get(i);
-      if (nextFormula.isFormulated() || !nextFormula.getText().equals(formula.getText())) {
-        break;
-      }
-      endCol = i;
-    }
-    if (endCol > startCol) {
-      sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), startCol, endCol));
-    }
-
-    return endCol - startCol;
-  }
 
   Cell getCell(CellType type, Row row, int column) {
     // 수평정렬 중앙 / 수직정렬 중앙

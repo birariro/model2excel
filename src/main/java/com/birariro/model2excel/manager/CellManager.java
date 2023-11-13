@@ -89,7 +89,8 @@ public class CellManager {
     CellStyle cellStyle = workbook.createCellStyle();
     cellStyle.setAlignment(hAlign); // 수평정렬
     cellStyle.setVerticalAlignment(vAlign); // 수직정렬
-
+     cellStyle.setWrapText(true); //개행 처리
+    
     // header title color
     if (type == CellType.TITLE) {
       setTitleCellStyle(cellStyle);

@@ -5,11 +5,12 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import com.birariro.model2excel.annotation.ExcelField;
+import com.birariro.model2excel.annotation.ExcelField.MaskingType;
 import com.birariro.model2excel.annotation.ExcelFieldGroup;
+import com.birariro.model2excel.utils.ExcelUtils;
+import com.birariro.model2excel.utils.MaskUtils;
 
 public class ExcelFieldReflection {
-
-
 
   /**
    * ExcelFieldGroup 을 사용하지 않았다면 종료한다.
@@ -38,6 +39,7 @@ public class ExcelFieldReflection {
 
     return groups;
   }
+
   private static String getExcelFieldGroupValue(Field field) {
     if (field.isAnnotationPresent(ExcelFieldGroup.class)) {
       return field.getAnnotation(ExcelFieldGroup.class).value();
@@ -53,13 +55,13 @@ public class ExcelFieldReflection {
 
     Field[] fields = clazz.getDeclaredFields();
 
-    String[] result = Arrays.stream(fields)
+    String[] titles = Arrays.stream(fields)
         .filter(field -> field.isAnnotationPresent(ExcelField.class))
         .map(field -> field.getAnnotation(ExcelField.class))
         .map(field -> field.value())
         .toArray(String[]::new);
 
-    return result;
+    return titles;
   }
 
   /**
@@ -69,16 +71,36 @@ public class ExcelFieldReflection {
 
     return Arrays.stream(model.getClass().getDeclaredFields())
         .filter(field -> field.isAnnotationPresent(ExcelField.class))
-        .map(Field::getName)
-        .filter(field -> field != null)
-        .filter(field -> !field.isEmpty())
-        .map(field -> Character.toUpperCase(field.charAt(0)) + field.substring(1))
-        .map(field -> "get" + field)
-        .map(methodName -> methodInvoke(model, methodName))
+        .map(field -> {
+              MaskingType type = field.getAnnotation(ExcelField.class).mask();
+              return findFieldData(model, field.getName(), type);
+            }
+        )
         .toArray(Object[]::new);
   }
 
-  private static Object methodInvoke(Object model, String methodName) {
+  /**
+   * 마스킹 설정이 되어있는 field는 마스킹하여 반환한다.
+   *
+   * @param model
+   * @param field
+   * @param masked
+   * @return
+   */
+  private static Object findFieldData(Object model, String field, MaskingType masked) {
+    if (!ExcelUtils.hasText(field)) {
+      return "";
+    }
+    String getterMethodName = "get" + Character.toUpperCase(field.charAt(0)) + field.substring(1);
+    Object o = getterMethodInvoke(model, getterMethodName);
+
+    if (masked != MaskingType.NONE) {
+      return MaskUtils.convertMaskString(masked, (String) o);
+    }
+    return o;
+  }
+
+  private static Object getterMethodInvoke(Object model, String methodName) {
     try {
       Method method = model.getClass().getMethod(methodName);
       return method.invoke(model);

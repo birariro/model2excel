@@ -12,6 +12,9 @@ excel 의 row 에 작성될 데이터 모델을 넘긴다.
 @ExcelField 가 있는 맴버 변수가 row 의 데이터로 들어간다 </br>
 각 맴버 변수는 Getter 가 있어야한다
 
+> **Note**  
+> mask 를 사용하여 데이터를 마스킹 할 수 있다.
+
 ```java
 @Getter
 public class OrderModel {

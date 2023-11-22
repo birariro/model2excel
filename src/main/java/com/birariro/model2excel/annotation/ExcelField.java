@@ -10,10 +10,11 @@ import java.lang.annotation.Target;
 public @interface ExcelField {
 
   String value() default "";
-
   MaskingType mask() default MaskingType.NONE;
-
-
+  /**
+   * ExcelSum 어노테이션을 사용한다면 ExcelField::sum 은 동작하지 않는다.
+   */
+  boolean sum() default false;
   enum MaskingType {
     NONE,
     /* 이름 */

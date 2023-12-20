@@ -6,8 +6,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -16,8 +16,6 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import com.birariro.model2excel.data.CellType;
@@ -78,7 +76,6 @@ public class CellManager {
   }
 
 
-
   Cell getCell(CellType type, Row row, int column) {
     // 수평정렬 중앙 / 수직정렬 중앙
     HorizontalAlignment hAlign = HorizontalAlignment.CENTER;
@@ -87,10 +84,10 @@ public class CellManager {
     Cell cell = row.createCell(column);
 
     CellStyle cellStyle = workbook.createCellStyle();
-    cellStyle.setAlignment(hAlign); // 수평정렬
-    cellStyle.setVerticalAlignment(vAlign); // 수직정렬
-     cellStyle.setWrapText(true); //개행 처리
-    
+    cellStyle.setAlignment(hAlign);
+    cellStyle.setVerticalAlignment(vAlign);
+    cellStyle.setWrapText(true);
+
     // header title color
     if (type == CellType.TITLE) {
       setTitleCellStyle(cellStyle);
@@ -104,5 +101,6 @@ public class CellManager {
     IndexedColors headerColumnColor = IndexedColors.GREY_25_PERCENT;
     cellStyle.setFillForegroundColor(headerColumnColor.getIndex());
     cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+    cellStyle.setBorderBottom(BorderStyle.THIN);
   }
 }

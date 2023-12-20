@@ -9,12 +9,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelField {
 
-  String value() default "";
+  String[] value() default {};
+
   MaskingType mask() default MaskingType.NONE;
-  /**
-   * ExcelSum 어노테이션을 사용한다면 ExcelField::sum 은 동작하지 않는다.
-   */
+
   boolean sum() default false;
+
   enum MaskingType {
     NONE,
     /* 이름 */

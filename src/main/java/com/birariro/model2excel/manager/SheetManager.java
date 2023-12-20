@@ -6,7 +6,10 @@ import java.util.stream.Collectors;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
-import com.birariro.model2excel.reflection.ExcelFieldReflection;
+import com.birariro.model2excel.data.Field;
+import com.birariro.model2excel.support.FieldReflector;
+import com.birariro.model2excel.support.RowReflector;
+
 
 public class SheetManager {
 
@@ -20,47 +23,42 @@ public class SheetManager {
     this.rowManager = new RowManager(this.workbook, this.sheet);
   }
 
+  public SXSSFWorkbook writeExcel(List<?> data) {
 
-  public SXSSFWorkbook writeExcel(
-      List<?> data) {
 
-    Object firstData = data.stream()
+    Class<?> clazz = data.stream()
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException());
+        .orElseThrow(() -> new IllegalArgumentException())
+        .getClass();
 
-    Class<?> clazz = firstData.getClass();
-    String[] groups = ExcelFieldReflection.getExcelFieldTitleGroup(clazz);
-    String[] title = ExcelFieldReflection.getExcelFieldTitle(clazz);
-
+    List<Field[]> field = FieldReflector.getFields(clazz);
     List<Object[]> rows = data.stream()
-        .map(item -> ExcelFieldReflection.getExcelFieldData(item))
+        .map(item -> RowReflector.getRows(item))
         .collect(Collectors.toList());
 
-    rowManager.writeTitleGroup(groups);
-    rowManager.writeTitle(title);
-    rowManager.mergeEmptyGroup(groups, title);
+    rowManager.writeTitle(field);
     rowManager.writeBody(rows);
     rowManager.writeFooter(clazz);
 
-    cellSizeControl(sheet, title.length);
+    cellSize(sheet, field.get(0).length);
     return this.workbook;
   }
 
+  private static void cellSize(SXSSFSheet sheet, int fieldSize) {
 
-  private void cellSizeControl(SXSSFSheet sheet, int cellSize) {
-
-    // auto size 적용을 위한 설정
     sheet.trackAllColumnsForAutoSizing();
 
-    // 모든 열 크기 자동으로 맞춤.
-    for (int i = 0; i < cellSize; i++) {
+    for (int i = 0; i < fieldSize; i++) {
+
       sheet.autoSizeColumn(i);
-      // 만약 자동으로 맞춘 열크기가 default column 크기보다 작을 때 default 로 변경처리
-      int defaultColumnWidth = 256 * sheet.getDefaultColumnWidth();
+
+      int defaultColumnWidth = 512 * sheet.getDefaultColumnWidth();
       if (sheet.getColumnWidth(i) < defaultColumnWidth) {
+
         sheet.setColumnWidth(i, defaultColumnWidth);
       }
     }
   }
 
 }
+

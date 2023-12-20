@@ -14,7 +14,10 @@ excel 의 row 에 작성될 데이터 모델을 넘긴다.
 
 > **Note**  
 > mask 를 사용하여 데이터를 마스킹 할 수 있다.
+> sum 을 사용하여 fields 로 지정된 맴버 변수의 데이터들을 합산 하여 가장 하단에 들어간다.
 
+
+#### common example
 ```java
 @Getter
 public class OrderModel {
@@ -37,11 +40,22 @@ public class OrderModel {
 </p>
 
 
-### @ExcelSum
+#### sum example
 ```java
-@ExcelSum(fields = {"count"})
 @Getter
-public class OrderModel
+public class OrderModel {
+  @ExcelField("주문 ID")
+  private Long orderId;
+
+  @ExcelField("상품 이름")
+  private String productName;
+
+  @ExcelField("가격")
+  private Long price;
+
+  @ExcelField(value = "수량", sum = true)
+  private Long count;
+}
 ```
 <p>
     <img src="https://github.com/birariro/model2excel/blob/master/image/ExcelField_sum_Image.png?raw=true"/>
@@ -52,26 +66,24 @@ public class OrderModel
 fields 로 지정되지 않은 타이틀 하단은 빈공간 으로 남게 된다 </br>
 
 
-### @ExcelFieldGroup
+#### array field value example
 
 
-@ExcelFieldGroup 를 사용하여 타이틀 의 상위 그룹을 지정할 수 있다.
+array 를 사용하여 여러 타이틀을 생성 할 수 있다.
 ```java
-@ExcelSum(fields = {"count"})
+
 @Getter
 public class OrderModel {
-  @ExcelField("주문 ID")
+  @ExcelField(value = {"주문 ID"})
   private Long orderId;
 
-  @ExcelField("상품 이름")
+  @ExcelField(value = {"상품 이름"})
   private String productName;
   
-  @ExcelFieldGroup("그룹")
-  @ExcelField("가격")
+  @ExcelField(value = {"그룹","가격"})
   private Long price;
   
-  @ExcelFieldGroup("그룹")
-  @ExcelField("수량")
+  @ExcelField(value = {"그룹","수량"}, sum = true)
   private Long count;
 }
 ```

@@ -4,70 +4,40 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import com.birariro.model2excel.data.CellType;
+import com.birariro.model2excel.data.Field;
 import com.birariro.model2excel.data.Formula;
-import com.birariro.model2excel.reflection.ExcelSumReflection;
+import com.birariro.model2excel.support.FieldMerge;
+import com.birariro.model2excel.support.SumReflector;
 
 public class RowManager {
 
-  private final static int ZERO = 0;
-
-  private final SXSSFWorkbook workbook;
   private final SXSSFSheet sheet;
   private final CellManager cellManager;
 
   public RowManager(SXSSFWorkbook workbook, SXSSFSheet sheet) {
-    this.workbook = workbook;
     this.sheet = sheet;
     this.cellManager = new CellManager(workbook);
   }
-  public void writeTitleGroup(String[] group) {
 
-    Row row = sheet.createRow(sheet.getLastRowNum() + 1);
-    for (int column = 0; column < group.length; column++) {
-      Cell cell = cellManager.getCell(CellType.TITLE, row, column);
-      cellManager.writeCell(cell, group[column]);
-    }
-  }
+  public void writeTitle(List<Field[]> fields) {
 
-  /**
-   * group 을 사용했다면 title 와 중복값을 merge 한다
-   *
-   * @param group
-   * @param title
-   */
-  public void mergeEmptyGroup(String[] group, String[] title) {
-
-    if (group.length == 0) {
-      return;
-    }
-    int groupRowNum = sheet.getLastRowNum() - 1;
-    int titleRowNum = sheet.getLastRowNum();
-
-    for (int column = 0; column < group.length; column++) {
-      if (group[column].equals(title[column])) {
-        sheet.addMergedRegion(new CellRangeAddress(groupRowNum, titleRowNum, column, column));
+    for (Field[] field : fields) {
+      Row row = sheet.createRow(sheet.getLastRowNum() + 1);
+      for (int column = 0; column < field.length; column++) {
+        Cell cell = cellManager.getCell(CellType.TITLE, row, column);
+        cellManager.writeCell(cell, field[column].getText());
       }
     }
-  }
-
-  public void writeTitle(String[] title) {
-
-    Row row = sheet.createRow(ZERO);
-    for (int column = 0; column < title.length; column++) {
-      Cell cell = cellManager.getCell(CellType.TITLE, row, column);
-      cellManager.writeCell(cell, title[column]);
-    }
+    FieldMerge.execute(sheet, fields);
   }
 
   public void writeBody(List<Object[]> rows) {
-    //body
-    for (int index = 0; index < rows.size(); index++) {
 
+    for (int index = 0; index < rows.size(); index++) {
       Row row = sheet.createRow(sheet.getLastRowNum() + 1);
       Object[] rowData = rows.get(index);
 
@@ -80,13 +50,12 @@ public class RowManager {
 
   public void writeFooter(Class<?> clazz) {
 
-    List<Formula> formulas = ExcelSumReflection.fieldSumFormula(clazz, sheet.getLastRowNum());
-
+    List<Formula> formulas = SumReflector.getFormula(clazz, sheet.getLastRowNum());
     if (formulas.isEmpty()) {
       return;
     }
 
-    Row row = sheet.createRow(sheet.getLastRowNum() + 1);
+    Row row = sheet.createRow(sheet.getLastRowNum() + 2);
     for (int index = 0; index < formulas.size(); index++) {
       Cell cell = cellManager.getCell(CellType.TITLE, row, index);
       Formula formula = formulas.get(index);

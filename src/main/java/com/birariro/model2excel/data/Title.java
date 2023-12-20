@@ -3,20 +3,20 @@ package com.birariro.model2excel.data;
 
 import java.util.Objects;
 
-public class Field {
+public class Title {
 
   private final String text;
 
-  private Field(String text) {
+  private Title(String text) {
     this.text = text;
   }
 
-  public static Field of(String text) {
-    return new Field(text);
+  public static Title of(String text) {
+    return new Title(text);
   }
 
-  public static Field ofEmpty() {
-    return new Field(null);
+  public static Title ofEmpty() {
+    return new Title(null);
   }
 
   public String getText() {
@@ -27,7 +27,7 @@ public class Field {
     return this.text == null;
   }
 
-  public boolean hasField() {
+  public boolean hasText() {
     return !isEmpty();
   }
 
@@ -40,7 +40,7 @@ public class Field {
       return false;
     }
 
-    Field field = (Field) o;
+    Title field = (Title) o;
 
     return Objects.equals(text, field.text);
   }

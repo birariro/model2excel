@@ -5,12 +5,12 @@ import java.util.List;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 
-import com.birariro.model2excel.data.Field;
+import com.birariro.model2excel.data.Title;
 
 
 public class FieldMerge {
 
-  public static void execute(SXSSFSheet sheet, List<Field[]> fields) {
+  public static void execute(SXSSFSheet sheet, List<Title[]> fields) {
 
     mergeFieldRow(sheet, fields);
     mergeFieldColumn(sheet, fields);
@@ -22,7 +22,7 @@ public class FieldMerge {
    *
    * @param fields
    */
-  private static void mergeFieldRow(SXSSFSheet sheet, List<Field[]> fields) {
+  private static void mergeFieldRow(SXSSFSheet sheet, List<Title[]> fields) {
 
     if (fields.size() <= 1) {
       return;
@@ -60,19 +60,19 @@ public class FieldMerge {
   /**
    * 같은 이름의 타이틀을 가진 필드들을 병합힌다.
    */
-  private static void mergeFieldColumn(SXSSFSheet sheet, List<Field[]> fields) {
+  private static void mergeFieldColumn(SXSSFSheet sheet, List<Title[]> fields) {
 
     for (int row = 0; row < fields.size(); row++) {
-      Field[] field = fields.get(row);
+      Title[] field = fields.get(row);
 
       int startPos = -1;
       int endPos = -1;
       boolean isMerging = false;
 
       for (int column = 1; column < field.length; column++) {
-        Field left = field[column - 1];
-        Field right = field[column];
-        if (left.hasField() && left.equals(right)) {
+        Title left = field[column - 1];
+        Title right = field[column];
+        if (left.hasText() && left.equals(right)) {
 
           if (!isMerging) {
             startPos = (column - 1);

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
-import com.birariro.model2excel.data.Field;
+import com.birariro.model2excel.data.Title;
 import com.birariro.model2excel.support.FieldReflector;
 import com.birariro.model2excel.support.RowReflector;
 
@@ -31,16 +31,16 @@ public class SheetManager {
         .orElseThrow(() -> new IllegalArgumentException())
         .getClass();
 
-    List<Field[]> field = FieldReflector.getFields(clazz);
+    List<Title[]> titles = FieldReflector.getFields(clazz);
     List<Object[]> rows = data.stream()
         .map(item -> RowReflector.getRows(item))
         .collect(Collectors.toList());
 
-    rowManager.writeTitle(field);
+    rowManager.writeTitle(titles);
     rowManager.writeBody(rows);
     rowManager.writeFooter(clazz);
 
-    cellSize(sheet, field.get(0).length);
+    cellSize(sheet, titles.get(0).length);
     return this.workbook;
   }
 

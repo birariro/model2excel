@@ -8,7 +8,7 @@ import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import com.birariro.model2excel.data.CellType;
-import com.birariro.model2excel.data.Field;
+import com.birariro.model2excel.data.Title;
 import com.birariro.model2excel.data.Formula;
 import com.birariro.model2excel.support.FieldMerge;
 import com.birariro.model2excel.support.SumReflector;
@@ -23,13 +23,13 @@ public class RowManager {
     this.cellManager = new CellManager(workbook);
   }
 
-  public void writeTitle(List<Field[]> fields) {
+  public void writeTitle(List<Title[]> fields) {
 
-    for (Field[] field : fields) {
+    for (Title[] title : fields) {
       Row row = sheet.createRow(sheet.getLastRowNum() + 1);
-      for (int column = 0; column < field.length; column++) {
+      for (int column = 0; column < title.length; column++) {
         Cell cell = cellManager.getCell(CellType.TITLE, row, column);
-        cellManager.writeCell(cell, field[column].getText());
+        cellManager.writeCell(cell, title[column].getText());
       }
     }
     FieldMerge.execute(sheet, fields);
@@ -57,7 +57,7 @@ public class RowManager {
 
     Row row = sheet.createRow(sheet.getLastRowNum() + 2);
     for (int index = 0; index < formulas.size(); index++) {
-      Cell cell = cellManager.getCell(CellType.TITLE, row, index);
+      Cell cell = cellManager.getCell(CellType.FOOTER, row, index);
       Formula formula = formulas.get(index);
 
       cellManager.writeFormula(cell, formula);

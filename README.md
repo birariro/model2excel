@@ -66,7 +66,7 @@ public class OrderModel {
 fields 로 지정되지 않은 타이틀 하단은 빈공간 으로 남게 된다 </br>
 
 
-#### array field value example
+#### array title value example
 
 
 array 를 사용하여 여러 타이틀을 생성 할 수 있다.

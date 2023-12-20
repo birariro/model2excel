@@ -77,7 +77,6 @@ public class CellManager {
 
 
   Cell getCell(CellType type, Row row, int column) {
-    // 수평정렬 중앙 / 수직정렬 중앙
     HorizontalAlignment hAlign = HorizontalAlignment.CENTER;
     VerticalAlignment vAlign = VerticalAlignment.CENTER;
 
@@ -90,17 +89,27 @@ public class CellManager {
 
     // header title color
     if (type == CellType.TITLE) {
-      setTitleCellStyle(cellStyle);
+      setTitleStyle(cellStyle);
+    }
+    else if (type == CellType.FOOTER) {
+      setFooterStyle(cellStyle);
     }
     cell.setCellStyle(cellStyle);
 
     return cell;
   }
 
-  private void setTitleCellStyle(CellStyle cellStyle) {
+  private void setTitleStyle(CellStyle cellStyle) {
     IndexedColors headerColumnColor = IndexedColors.GREY_25_PERCENT;
     cellStyle.setFillForegroundColor(headerColumnColor.getIndex());
     cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
     cellStyle.setBorderBottom(BorderStyle.THIN);
+    cellStyle.setBorderLeft(BorderStyle.THIN);
+    cellStyle.setBorderRight(BorderStyle.THIN);
+  }
+  private void setFooterStyle(CellStyle cellStyle) {
+    IndexedColors headerColumnColor = IndexedColors.GREY_25_PERCENT;
+    cellStyle.setFillForegroundColor(headerColumnColor.getIndex());
+    cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
   }
 }

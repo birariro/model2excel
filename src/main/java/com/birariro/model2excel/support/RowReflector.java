@@ -5,8 +5,7 @@ import java.util.Arrays;
 
 import com.birariro.model2excel.annotation.ExcelField;
 import com.birariro.model2excel.annotation.ExcelField.MaskingType;
-import com.birariro.model2excel.utils.ExcelUtils;
-import com.birariro.model2excel.utils.MaskUtils;
+import com.birariro.model2excel.mask.Masker;
 
 public class RowReflector {
 
@@ -34,14 +33,14 @@ public class RowReflector {
    * @return
    */
   private static Object findFieldData(Object model, String field, MaskingType masked) {
-    if (!ExcelUtils.hasText(field)) {
+    if (!StringChecker.hasText(field)) {
       return "";
     }
     String getterMethodName = "get" + Character.toUpperCase(field.charAt(0)) + field.substring(1);
     Object o = getterMethodInvoke(model, getterMethodName);
 
     if (masked != MaskingType.NONE) {
-      return MaskUtils.convertMaskString(masked, (String) o);
+      return Masker.mask(masked, (String) o);
     }
     return o;
   }

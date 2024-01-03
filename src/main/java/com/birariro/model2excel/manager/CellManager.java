@@ -20,7 +20,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import com.birariro.model2excel.data.CellType;
 import com.birariro.model2excel.data.Formula;
-import com.birariro.model2excel.utils.ExcelUtils;
+import com.birariro.model2excel.support.StringChecker;
 
 public class CellManager {
 
@@ -41,7 +41,7 @@ public class CellManager {
     }
 
     String text = formula.getText();
-    if (!ExcelUtils.hasText(text)) {
+    if (!StringChecker.hasText(text)) {
       return;
     }
     cell.setCellFormula(text);

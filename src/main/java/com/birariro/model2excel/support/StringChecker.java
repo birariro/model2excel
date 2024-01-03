@@ -1,7 +1,7 @@
-package com.birariro.model2excel.utils;
+package com.birariro.model2excel.support;
 
 
-public class ExcelUtils {
+public class StringChecker {
 
   public static boolean hasText(String str) {
     return (str != null && !str.isEmpty() && containsText(str));
